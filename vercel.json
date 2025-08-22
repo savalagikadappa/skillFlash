@@ -1,19 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "/client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
+  "buildCommand": "npm --prefix client install && npm --prefix client run build",
+  "outputDirectory": "client/dist",
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/dist/index.html"
-    }
+    { "src": "/.*", "dest": "/index.html" }
   ],
   "env": {
     "VITE_API_URL": "https://skillflash.onrender.com"
