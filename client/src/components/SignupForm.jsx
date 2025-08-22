@@ -13,6 +13,9 @@ const SignupForm = () => {
   const { login } = useContext(AuthContext);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+  if(!apiUrl){
+    console.warn('VITE_API_URL not set - define VITE_API_URL in a .env file at project root of client.');
+  }
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -30,7 +33,7 @@ const SignupForm = () => {
 
       try {
         console.log('API URL:', apiUrl)
-        await axios.post(`${apiUrl}/signup`, { email, password });
+  await axios.post(`${apiUrl || ''}/api/auth/signup`, { email, password });
         setMessage('OTP sent to your email');
         setShowOtpField(true);
         setLoading(false);
@@ -47,10 +50,14 @@ const SignupForm = () => {
       }
 
       try {
-        const response = await axios.post(`${apiUrl}/verify-otp`, { email, otp });
-        const { token } = response.data; // Assuming backend returns { token: "..." }
-        login(token, { email }); // Update context and redirect
-        setLoading(false); // Reset loading on success
+  const response = await axios.post(`${apiUrl || ''}/api/auth/verify-otp`, { email, otp });
+        if(response.data.success){
+          const { token } = response.data; // { success, message, token }
+          login(token, { email });
+        } else {
+          setError(response.data.error || 'OTP verification failed');
+        }
+        setLoading(false); // Reset loading on success or handled failure
       } catch (error) {
         setError(error.response?.data?.error || 'OTP verification failed');
         setLoading(false);
@@ -59,35 +66,24 @@ const SignupForm = () => {
   };
 
   return (
-    <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        disabled={loading || showOtpField}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        disabled={loading || showOtpField}
-      />
+    <form onSubmit={handleSignup} className="space-y-4">
+      <div className="space-y-2">
+        <label className="block text-xs uppercase tracking-wide text-gray-400">Email</label>
+        <input type="email" placeholder="you@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled={loading || showOtpField} className="w-full rounded-md bg-surface border border-white/10 focus:border-accent2 focus:ring-accent2 text-sm px-3 py-2" />
+      </div>
+      <div className="space-y-2">
+        <label className="block text-xs uppercase tracking-wide text-gray-400">Password</label>
+        <input type="password" placeholder="Strong password" value={password} onChange={(e)=>setPassword(e.target.value)} disabled={loading || showOtpField} className="w-full rounded-md bg-surface border border-white/10 focus:border-accent2 focus:ring-accent2 text-sm px-3 py-2" />
+      </div>
       {showOtpField && (
-        <input
-          type="text"
-          placeholder="Enter OTP"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
-          disabled={loading}
-        />
+        <div className="space-y-2">
+          <label className="block text-xs uppercase tracking-wide text-gray-400">OTP</label>
+          <input type="text" placeholder="6-digit code" value={otp} onChange={(e)=>setOtp(e.target.value)} disabled={loading} className="w-full tracking-widest text-center rounded-md bg-surface border border-white/10 focus:border-accent2 focus:ring-accent2 text-sm px-3 py-2" />
+        </div>
       )}
-      {message && <p style={{ color: 'green' }}>{message}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit" disabled={loading}>
-        {loading ? 'Processing...' : showOtpField ? 'Verify OTP' : 'Signup'}
-      </button>
+      {message && <p className="text-sm text-emerald-400">{message}</p>}
+      {error && <p className="text-sm text-red-500">{error}</p>}
+      <button type="submit" disabled={loading} className="w-full btn-secondary disabled:opacity-60 disabled:cursor-not-allowed">{loading ? 'Processing...' : showOtpField ? 'Verify OTP' : 'Signup'}</button>
     </form>
   );
 };

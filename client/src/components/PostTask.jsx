@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import "../styles/PostTask.css";
+// Tailwind styling applied
 
 const PostTask = () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    console.log('API URL:', import.meta.env.VITE_API_URL);
+        const apiUrl = import.meta.env.VITE_API_URL;
+        if(!apiUrl){
+            console.warn('VITE_API_URL not set - API calls will fail. Define it in a .env file (e.g. VITE_API_URL=http://localhost:5000)');
+        }
 
     const [formData, setFormData] = useState({
         problemTitle: '',
@@ -31,13 +33,20 @@ const PostTask = () => {
         setSuccess('');
         try {
             // Make sure the backend endpoint matches what you defined ("/add-task")
-            const response = await axios.post(`${apiUrl}/add-task`, formData, {
+        const token = localStorage.getItem('authToken');
+    const base = apiUrl || '';
+    const response = await axios.post(`${base}/api/tasks`, formData, {
                 headers: {
-                    "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
                 }
             });
             console.log('Response:', response.data);
-            setSuccess(response.data);
+            if(response.data.success){
+                setSuccess(response.data.message || 'Task added successfully');
+            } else {
+                setError(response.data.error || 'Failed to add task');
+            }
             setFormData({
                 problemTitle: '',
                 problemDescription: '',
@@ -50,62 +59,39 @@ const PostTask = () => {
         setLoading(false);
     };
 
-    return (
-        <div className="form-container">
-            <h1>Post Task</h1>
-            <p>This is where you can post a new task.</p>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="problemTitle">Task Title</label>
-                    <input
-                        type="text"
-                        id="problemTitle"
-                        name="problemTitle"
-                        value={formData.problemTitle}
-                        onChange={handleChange}
-                        required
-                    />
+        return (
+            <div className="max-w-3xl mx-auto px-4 pb-16">
+                <div className="card space-y-6 mt-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-white mb-2">Post a Task</h1>
+                        <p className="text-sm text-gray-400">Describe your task and get matched instantly.</p>
+                    </div>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="block text-xs uppercase tracking-wide text-gray-400" htmlFor="problemTitle">Task Title</label>
+                            <input id="problemTitle" name="problemTitle" value={formData.problemTitle} onChange={handleChange} required className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent px-3 py-2 text-sm" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="block text-xs uppercase tracking-wide text-gray-400" htmlFor="problemDescription">Description</label>
+                            <textarea id="problemDescription" name="problemDescription" value={formData.problemDescription} onChange={handleChange} required rows={5} className="w-full resize-y rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent px-3 py-2 text-sm" />
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="block text-xs uppercase tracking-wide text-gray-400" htmlFor="budget">Budget ($)</label>
+                                <input type="number" id="budget" name="budget" value={formData.budget} onChange={handleChange} required className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent px-3 py-2 text-sm" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-xs uppercase tracking-wide text-gray-400" htmlFor="deadline">Deadline</label>
+                                <input type="date" id="deadline" name="deadline" value={formData.deadline} onChange={handleChange} required className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent px-3 py-2 text-sm" />
+                            </div>
+                        </div>
+                        {error && <p className="text-sm text-red-500">{error}</p>}
+                        {success && <p className="text-sm text-emerald-400">{success}</p>}
+                        <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60 disabled:cursor-not-allowed">{loading ? 'Submitting...' : 'Add Task'}</button>
+                    </form>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="problemDescription">Description</label>
-                    <textarea
-                        id="problemDescription"
-                        name="problemDescription"
-                        value={formData.problemDescription}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="budget">Budget ($)</label>
-                    <input
-                        type="number"
-                        id="budget"
-                        name="budget"
-                        value={formData.budget}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="deadline">Deadline</label>
-                    <input
-                        type="date"
-                        id="deadline"
-                        name="deadline"
-                        value={formData.deadline}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                {error && <p className="error">{error}</p>}
-                {success && <p className="success">{success}</p>}
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Submitting...' : 'Add Task'}
-                </button>
-            </form>
-        </div>
-    );
+            </div>
+        );
 };
 
 export default PostTask;

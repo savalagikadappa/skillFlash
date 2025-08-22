@@ -1,30 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Contact.css'
+// Tailwind styling applied
 
 const Contact = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [submitted, setSubmitted] = useState(false);
-    const socialIconsRef = useRef(null);
-    const formRef = useRef(null);
-    const headerRef = useRef(null);
-
-    useEffect(() => {
-        // Add animation classes after component mounts
-        if (headerRef.current) {
-            headerRef.current.classList.add('appear');
-        }
-
-        if (socialIconsRef.current) {
-            socialIconsRef.current.classList.add('appear');
-        }
-
-        if (formRef.current) {
-            formRef.current.classList.add('appear');
-        }
-    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,140 +25,81 @@ const Contact = () => {
     };
 
     return (
-        <div className="contact-container">
-            <div className="contact-content">
-                <div className="contact-header" ref={headerRef}>
-                    <span className="subtitle">Get in Touch</span>
-                    <h1>Contact Us</h1>
-                    <p className="header-description">
-                        We'd love to hear from you. Let us know how we can help with you , feel free to contact us.
-                    </p>
-                </div>
-
-                <div className="contact-sections">
-                    <div className="contact-info">
-                        <div className="social-icons" ref={socialIconsRef}>
-                            <h3>Connect With Us</h3>
-                            <div className="social-links">
-                                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                                    <div className="icon linkedin">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                            <rect x="2" y="9" width="4" height="12"></rect>
-                                            <circle cx="4" cy="4" r="2"></circle>
-                                        </svg>
-                                    </div>
-                                    <span>LinkedIn</span>
-                                </a>
-
-                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                                    <div className="icon twitter">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                                        </svg>
-                                    </div>
-                                    <span>Twitter</span>
-                                </a>
-
-                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">
-                                    <div className="icon instagram">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                        </svg>
-                                    </div>
-                                    <span>Instagram</span>
-                                </a>
-
-                                <a href="mailto:contact@yourcompany.com" className="social-link">
-                                    <div className="icon mail">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                            <polyline points="22,6 12,13 2,6"></polyline>
-                                        </svg>
-                                    </div>
-                                    <span>Email Us</span>
-                                </a>
+                <div className="max-w-6xl mx-auto px-4 pb-24">
+                    <div className="text-center mb-16">
+                        <span className="inline-block text-accent text-xs font-semibold tracking-widest uppercase mb-3">Get in Touch</span>
+                        <h1 className="text-4xl font-bold text-white mb-4">Contact Us</h1>
+                        <p className="text-gray-400 max-w-2xl mx-auto text-sm">We'd love to hear from you. Let us know how we can help you. Feel free to reach out.</p>
+                    </div>
+                    <div className="grid lg:grid-cols-3 gap-10">
+                        <div className="space-y-10 lg:col-span-1">
+                            <div className="card space-y-4">
+                                <h3 className="text-white font-semibold text-lg">Connect With Us</h3>
+                                <div className="flex flex-col gap-3">
+                                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/60 hover:bg-surface border border-white/5 hover:border-accent/40 transition text-gray-300 text-sm">
+                                        <span className="w-8 h-8 inline-flex items-center justify-center rounded-md bg-accent/15 text-accent">in</span>
+                                        <span>LinkedIn</span>
+                                    </a>
+                                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/60 hover:bg-surface border border-white/5 hover:border-accent/40 transition text-gray-300 text-sm">
+                                        <span className="w-8 h-8 inline-flex items-center justify-center rounded-md bg-accent/15 text-accent">tw</span>
+                                        <span>Twitter</span>
+                                    </a>
+                                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/60 hover:bg-surface border border-white/5 hover:border-accent/40 transition text-gray-300 text-sm">
+                                        <span className="w-8 h-8 inline-flex items-center justify-center rounded-md bg-accent/15 text-accent">ig</span>
+                                        <span>Instagram</span>
+                                    </a>
+                                    <a href="mailto:contact@yourcompany.com" className="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface/60 hover:bg-surface border border-white/5 hover:border-accent/40 transition text-gray-300 text-sm">
+                                        <span className="w-8 h-8 inline-flex items-center justify-center rounded-md bg-accent/15 text-accent">@</span>
+                                        <span>Email Us</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div className="card space-y-2">
+                                <h3 className="text-white font-semibold text-lg">Visit Our Office</h3>
+                                <p className="text-gray-400 text-sm">123 Design Studio Street</p>
+                                <p className="text-gray-400 text-sm">Creative District, CA 91234</p>
+                                <p className="text-gray-400 text-sm">Mon-Fri: 9:00 AM - 6:00 PM</p>
                             </div>
                         </div>
-
-                        <div className="address-info">
-                            <h3>Visit Our Office</h3>
-                            <p>123 Design Studio Street</p>
-                            <p>Creative District, CA 91234</p>
-                            <p>Mon-Fri: 9:00 AM - 6:00 PM</p>
+                        <div className="lg:col-span-2">
+                            <div className="card">
+                                <h3 className="text-white font-semibold text-lg mb-6">Send Us a Message</h3>
+                                {submitted ? (
+                                    <div className="flex flex-col items-center gap-3 py-10">
+                                        <div className="w-14 h-14 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                        </div>
+                                        <p className="text-emerald-400 text-sm">Thank you! Your message has been sent successfully.</p>
+                                    </div>
+                                ) : (
+                                    <form onSubmit={handleSubmit} className="space-y-6">
+                                        <div className="grid sm:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label htmlFor="name" className="block text-xs font-medium uppercase tracking-wide text-gray-400">Name</label>
+                                                <input id="name" type="text" value={name} onChange={(e)=>setName(e.target.value)} required placeholder="Your name" className="w-full bg-surface rounded-md border border-white/10 focus:border-accent focus:ring-accent px-3 py-2.5 text-sm" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="email" className="block text-xs font-medium uppercase tracking-wide text-gray-400">Email</label>
+                                                <input id="email" type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required placeholder="Your email" className="w-full bg-surface rounded-md border border-white/10 focus:border-accent focus:ring-accent px-3 py-2.5 text-sm" />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label htmlFor="message" className="block text-xs font-medium uppercase tracking-wide text-gray-400">Message</label>
+                                            <textarea id="message" value={message} onChange={(e)=>setMessage(e.target.value)} required placeholder="How can we help you?" rows={6} className="w-full bg-surface rounded-md border border-white/10 focus:border-accent focus:ring-accent px-3 py-2.5 text-sm resize-y" />
+                                        </div>
+                                        <button type="submit" className="btn-primary w-full sm:w-auto inline-flex items-center gap-2">
+                                            <span>Send Message</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                                        </button>
+                                    </form>
+                                )}
+                            </div>
                         </div>
                     </div>
-
-                    <div className="contact-form-container" ref={formRef}>
-                        <div className="form-content">
-                            <h3>Send Us a Message</h3>
-
-                            {submitted ? (
-                                <div className="success-message">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                    </svg>
-                                    <p>Thank you! Your message has been sent successfully.</p>
-                                </div>
-                            ) : (
-                                <form onSubmit={handleSubmit}>
-                                    <div className="form-group">
-                                        <label htmlFor="name">Name</label>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            required
-                                            placeholder="Your name"
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="email">Email</label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            required
-                                            placeholder="Your email address"
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="message">Message</label>
-                                        <textarea
-                                            id="message"
-                                            value={message}
-                                            onChange={(e) => setMessage(e.target.value)}
-                                            required
-                                            placeholder="How can we help you?"
-                                            rows={6}
-                                        />
-                                    </div>
-
-                                    <button type="submit" className="submit-button">
-                                        <span>Send Message</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                                        </svg>
-                                    </button>
-                                </form>
-                            )}
-                        </div>
+                    <div className="mt-12 text-center">
+                        <Link to="/" className="text-sm text-gray-400 hover:text-white transition">← Back to Home</Link>
                     </div>
                 </div>
-            </div>
-
-            <div className="navigation-link">
-                <Link to="/">Back to Home</Link>
-            </div>
-        </div>
     );
 };
 

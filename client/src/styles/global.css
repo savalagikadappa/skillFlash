@@ -1,44 +1,11 @@
-/* Set a base font size */
-:root {
-    font-size: 16px;
+/* tailwindcss directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-}
-
-/* Reset & Global Styles */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html,
-body,
-#root {
-    width: 100vw;
-    /* height: 100vh; */
-    margin: 0;
-    padding: 0;
-}
-
-
-
-/* #root Background and content layout */
-#root {
-    /* background-image: url("../components/bg.jpg"); */
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    /* Stack content vertically */
-    min-height: 100vh;
-    /* Ensure full viewport height */
-}
-
-/* Ensure content starts below the fixed navbar */
-main {
-    flex: 1;
-    /* Allow main content to take remaining space */
-    padding-top: 6rem;
-    /* Match navbar height to prevent overlap (adjust if navbar height changes) */
-}
+html, body, #root { height: 100%; }
+body { @apply bg-background text-gray-100 font-sans antialiased; }
+main { @apply flex-1 pt-24; }
+.btn-primary { @apply inline-flex items-center justify-center rounded-md bg-accent hover:bg-accent/90 text-white font-medium px-5 py-2.5 transition; }
+.btn-secondary { @apply inline-flex items-center justify-center rounded-md bg-accent2 hover:bg-accent2/90 text-white font-medium px-5 py-2.5 transition; }
+.card { @apply bg-surface/80 backdrop-blur rounded-xl border border-white/5 shadow-glow p-6; }

@@ -7,7 +7,7 @@ import PostTask from "./components/PostTask.jsx";
 import Freelancer from "./components/Freelancer.jsx";
 import Contact from "./components/Contact.jsx";
 import Home from "./components/Home.jsx";
-import './styles/global.css';
+// global Tailwind styles are imported once in main.jsx
 
 const App = () => {
   const location = useLocation();

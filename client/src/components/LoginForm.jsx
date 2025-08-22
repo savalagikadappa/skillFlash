@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
+import axios from 'axios'; // kept for now; could migrate to fetch wrapper
 import { AuthContext } from './AuthContext';
 
 const LoginForm = () => {
@@ -23,15 +23,19 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await axios.post(`${apiUrl}/login`, {
+  const response = await axios.post(`${apiUrl}/api/auth/login`, {
         email,
         password,
       }, {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const { token } = response.data; // Assuming backend returns { token: "..." }
-      login(token, { email }); // Update context and redirect
+      if(response.data.success){
+        const { token } = response.data; // { success, message, token }
+        login(token, { email });
+      } else {
+        setError(response.data.error || 'Login failed');
+      }
       setLoading(false); // Ensure loading is reset on success
     } catch (error) {
       setError(error.response?.data?.error || 'Login failed');
@@ -40,25 +44,17 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        disabled={loading}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        disabled={loading}
-      />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit" disabled={loading}>
-        {loading ? 'Logging in...' : 'Login'}
-      </button>
+    <form onSubmit={handleLogin} className="space-y-4">
+      <div className="space-y-2">
+        <label className="block text-xs uppercase tracking-wide text-gray-400">Email</label>
+        <input type="email" className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent text-sm px-3 py-2" placeholder="you@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled={loading} />
+      </div>
+      <div className="space-y-2">
+        <label className="block text-xs uppercase tracking-wide text-gray-400">Password</label>
+        <input type="password" className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent text-sm px-3 py-2" placeholder="••••••••" value={password} onChange={(e)=>setPassword(e.target.value)} disabled={loading} />
+      </div>
+      {error && <p className="text-sm text-red-500">{error}</p>}
+      <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60 disabled:cursor-not-allowed">{loading ? 'Logging in...' : 'Login'}</button>
     </form>
   );
 };

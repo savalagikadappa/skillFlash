@@ -1,6 +1,8 @@
 {
-  "dependencies": {
-    "react-tsparticles": "^2.12.2",
-    "tsparticles": "^3.8.1"
-  }
+  "private": true,
+  "name": "skillflash-monorepo",
+  "version": "0.0.0",
+  "description": "Root manifest (no runtime deps) - client and server manage their own dependencies.",
+  "workspaces": ["client", "server"],
+  "license": "UNLICENSED"
 }
