@@ -62,24 +62,26 @@ const SignupForm = () => {
   };
 
   return (
-    <form onSubmit={handleSignup} className="space-y-4">
+    <form onSubmit={handleSignup} className="space-y-6">
       <div className="space-y-2">
-        <label className="block text-xs uppercase tracking-wide text-gray-400">Email</label>
-        <input type="email" placeholder="you@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled={loading || showOtpField} className="w-full rounded-md bg-surface border border-white/10 focus:border-accent2 focus:ring-accent2 text-sm px-3 py-2" />
+        <label className="block text-xs font-medium tracking-wide text-gray-400 uppercase">Email</label>
+        <input type="email" placeholder="you@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled={loading || showOtpField} className="w-full rounded-md bg-surface/70 border border-white/10 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/30 text-sm px-3 py-2 transition" />
       </div>
       <div className="space-y-2">
-        <label className="block text-xs uppercase tracking-wide text-gray-400">Password</label>
-        <input type="password" placeholder="Strong password" value={password} onChange={(e)=>setPassword(e.target.value)} disabled={loading || showOtpField} className="w-full rounded-md bg-surface border border-white/10 focus:border-accent2 focus:ring-accent2 text-sm px-3 py-2" />
+        <label className="block text-xs font-medium tracking-wide text-gray-400 uppercase">Password</label>
+        <input type="password" placeholder="Strong password" value={password} onChange={(e)=>setPassword(e.target.value)} disabled={loading || showOtpField} className="w-full rounded-md bg-surface/70 border border-white/10 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/30 text-sm px-3 py-2 transition" />
       </div>
       {showOtpField && (
         <div className="space-y-2">
-          <label className="block text-xs uppercase tracking-wide text-gray-400">OTP</label>
-          <input type="text" placeholder="6-digit code" value={otp} onChange={(e)=>setOtp(e.target.value)} disabled={loading} className="w-full tracking-widest text-center rounded-md bg-surface border border-white/10 focus:border-accent2 focus:ring-accent2 text-sm px-3 py-2" />
+          <label className="block text-xs font-medium tracking-wide text-gray-400 uppercase">OTP</label>
+          <input type="text" placeholder="6-digit code" value={otp} onChange={(e)=>setOtp(e.target.value)} disabled={loading} className="w-full tracking-widest text-center rounded-md bg-surface/70 border border-white/10 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/30 text-sm px-3 py-2 transition" />
         </div>
       )}
       {message && <p className="text-sm text-emerald-400">{message}</p>}
       {error && <p className="text-sm text-red-500">{error}</p>}
-      <button type="submit" disabled={loading} className="w-full btn-secondary disabled:opacity-60 disabled:cursor-not-allowed">{loading ? 'Processing...' : showOtpField ? 'Verify OTP' : 'Signup'}</button>
+      <button type="submit" disabled={loading} className="w-full px-5 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-sm font-semibold text-white tracking-wide shadow-md shadow-blue-900/30 hover:from-blue-700 hover:to-cyan-700 transition disabled:opacity-60 disabled:cursor-not-allowed">
+        {loading ? 'Processing...' : showOtpField ? 'Verify OTP' : 'Signup'}
+      </button>
     </form>
   );
 };

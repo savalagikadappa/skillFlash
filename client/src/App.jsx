@@ -16,8 +16,8 @@ const App = () => {
   return (
     <AuthProvider>
 
-      {!hideNavBarPaths.includes(location.pathname) && <NavBar />}
-      <main> {/* Wrap Routes in a main element */}
+  {!hideNavBarPaths.includes(location.pathname) && <NavBar />}
+  <main className={!hideNavBarPaths.includes(location.pathname) ? 'with-nav-offset' : ''}> {/* Add top offset only when nav is visible */}
         <Routes>
           <Route path="/login" element={<LoginOrSignup />} />
           <Route path="/" element={<Home />} />

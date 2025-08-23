@@ -5,7 +5,8 @@
 
 html, body, #root { height: 100%; }
 body { @apply bg-background text-gray-100 font-sans antialiased; }
-main { @apply flex-1 pt-24; }
+main { @apply flex-1; }
+.with-nav-offset { @apply pt-24; }
 .btn-primary { @apply inline-flex items-center justify-center rounded-md bg-accent hover:bg-accent/90 text-white font-medium px-5 py-2.5 transition; }
 .btn-secondary { @apply inline-flex items-center justify-center rounded-md bg-accent2 hover:bg-accent2/90 text-white font-medium px-5 py-2.5 transition; }
 .card { @apply bg-surface/80 backdrop-blur rounded-xl border border-white/5 shadow-glow p-6; }

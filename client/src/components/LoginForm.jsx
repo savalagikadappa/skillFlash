@@ -15,13 +15,6 @@ const LoginForm = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
-    if (!email || !password) {
-      setError('Please fill in all fields');
-      setLoading(false);
-      return;
-    }
-
     try {
       const response = await post('/api/auth/login', { email, password });
       if(response?.success){
@@ -30,7 +23,7 @@ const LoginForm = () => {
       } else {
         setError(response?.error || 'Login failed');
       }
-      setLoading(false); // Ensure loading is reset on success
+      setLoading(false);
     } catch (error) {
       setError(error?.error || 'Login failed');
       setLoading(false);
@@ -38,23 +31,24 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleLogin} className="space-y-4">
-      <div className="rounded-md bg-blue-500/10 border border-blue-400/30 p-3 text-xs leading-relaxed text-blue-300">
-        <strong className="block text-blue-200 mb-1">Demo Account</strong>
-        For quick evaluation use:<br />
-        Email: <code className="font-mono">temp@gmail.com</code><br />
-        Password: <code className="font-mono">1234</code>
+    <form onSubmit={handleLogin} className="space-y-6">
+      <div className="rounded-lg border border-blue-500/30 bg-gradient-to-br from-blue-600/10 via-cyan-500/10 to-transparent p-4 text-[11px] leading-relaxed text-blue-300">
+        <strong className="block text-blue-200 mb-1 tracking-wide">Demo Account</strong>
+        Try instantly:<br />
+        Email: <code className="font-mono">temp@gmail.com</code> · Password: <code className="font-mono">1234</code>
       </div>
       <div className="space-y-2">
-        <label className="block text-xs uppercase tracking-wide text-gray-400">Email</label>
-        <input type="email" className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent text-sm px-3 py-2" placeholder="you@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled={loading} />
+        <label className="block text-xs font-medium tracking-wide text-gray-400 uppercase">Email</label>
+        <input type="email" className="w-full rounded-md bg-surface/70 border border-white/10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 text-sm px-3 py-2 transition" placeholder="you@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled={loading} />
       </div>
       <div className="space-y-2">
-        <label className="block text-xs uppercase tracking-wide text-gray-400">Password</label>
-        <input type="password" className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent text-sm px-3 py-2" placeholder="••••••••" value={password} onChange={(e)=>setPassword(e.target.value)} disabled={loading} />
+        <label className="block text-xs font-medium tracking-wide text-gray-400 uppercase">Password</label>
+        <input type="password" className="w-full rounded-md bg-surface/70 border border-white/10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 text-sm px-3 py-2 transition" placeholder="••••••••" value={password} onChange={(e)=>setPassword(e.target.value)} disabled={loading} />
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}
-      <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60 disabled:cursor-not-allowed">{loading ? 'Logging in...' : 'Login'}</button>
+      <button type="submit" disabled={loading} className="w-full px-5 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 text-sm font-semibold text-white tracking-wide shadow-md shadow-blue-900/30 hover:from-blue-700 hover:to-cyan-700 transition disabled:opacity-60 disabled:cursor-not-allowed">
+        {loading ? 'Logging in...' : 'Login'}
+      </button>
     </form>
   );
 };
