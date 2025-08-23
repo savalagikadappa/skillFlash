@@ -45,7 +45,7 @@ app.post('/add-task', auth, async (req, res) => {
         if (!problemTitle || !problemDescription || !budget || !deadline) {
             return res.status(400).json({ success: false, error: 'All fields are required.' });
         }
-    const task = new Task({ problemTitle, problemDescription, budget, deadline, user: req.user.sub });
+        const task = new Task({ problemTitle, problemDescription, budget, deadline, user: req.user.sub });
         await task.save();
         res.status(201).json({ success: true, message: 'Task added successfully', task });
     } catch (err) {
@@ -56,7 +56,7 @@ app.post('/add-task', auth, async (req, res) => {
 
 app.get('/tasks', async (req, res) => {
     try {
-    const tasks = await Task.find().sort({ createdAt: -1 }).populate('user', 'email');
+        const tasks = await Task.find().sort({ createdAt: -1 }).populate('user', 'email');
         res.status(200).json({ success: true, tasks });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Error retrieving tasks' });
@@ -125,6 +125,7 @@ const handleResendOtp = async (req, res) => {
         if (!user) return res.status(404).json({ success: false, error: 'User not found' });
         const otp = generateOTP();
         const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+        console.log(otp);
         user.otp = otp;
         user.otpExpires = otpExpires;
         await user.save();

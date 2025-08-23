@@ -39,6 +39,12 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleLogin} className="space-y-4">
+      <div className="rounded-md bg-blue-500/10 border border-blue-400/30 p-3 text-xs leading-relaxed text-blue-300">
+        <strong className="block text-blue-200 mb-1">Demo Account</strong>
+        For quick evaluation use:<br />
+        Email: <code className="font-mono">temp@gmail.com</code><br />
+        Password: <code className="font-mono">1234</code>
+      </div>
       <div className="space-y-2">
         <label className="block text-xs uppercase tracking-wide text-gray-400">Email</label>
         <input type="email" className="w-full rounded-md bg-surface border border-white/10 focus:border-accent focus:ring-accent text-sm px-3 py-2" placeholder="you@example.com" value={email} onChange={(e)=>setEmail(e.target.value)} disabled={loading} />
