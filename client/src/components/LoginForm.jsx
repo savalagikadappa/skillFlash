@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios'; // kept for now; could migrate to fetch wrapper
 import { AuthContext } from './AuthContext';
+import { post } from '../api';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -9,7 +9,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
 
-  const apiUrl = import.meta.env.VITE_API_URL;
+  // API base handled centrally
   
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,22 +23,16 @@ const LoginForm = () => {
     }
 
     try {
-  const response = await axios.post(`${apiUrl}/api/auth/login`, {
-        email,
-        password,
-      }, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if(response.data.success){
-        const { token } = response.data; // { success, message, token }
+      const response = await post('/api/auth/login', { email, password });
+      if(response?.success){
+        const { token } = response; // { success, message, token }
         login(token, { email });
       } else {
-        setError(response.data.error || 'Login failed');
+        setError(response?.error || 'Login failed');
       }
       setLoading(false); // Ensure loading is reset on success
     } catch (error) {
-      setError(error.response?.data?.error || 'Login failed');
+      setError(error?.error || 'Login failed');
       setLoading(false);
     }
   };

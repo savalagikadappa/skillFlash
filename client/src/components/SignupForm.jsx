@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 import { AuthContext } from './AuthContext';
+import { post } from '../api';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -12,10 +12,7 @@ const SignupForm = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-  if(!apiUrl){
-    console.warn('VITE_API_URL not set - define VITE_API_URL in a .env file at project root of client.');
-  }
+  // API base handled centrally in api.js
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -32,8 +29,7 @@ const SignupForm = () => {
       }
 
       try {
-        console.log('API URL:', apiUrl)
-  await axios.post(`${apiUrl || ''}/api/auth/signup`, { email, password });
+  await post('/api/auth/signup', { email, password });
         setMessage('OTP sent to your email');
         setShowOtpField(true);
         setLoading(false);
@@ -50,16 +46,16 @@ const SignupForm = () => {
       }
 
       try {
-  const response = await axios.post(`${apiUrl || ''}/api/auth/verify-otp`, { email, otp });
-        if(response.data.success){
-          const { token } = response.data; // { success, message, token }
+        const response = await post('/api/auth/verify-otp', { email, otp });
+        if(response.success){
+          const { token } = response; // { success, message, token }
           login(token, { email });
         } else {
-          setError(response.data.error || 'OTP verification failed');
+          setError(response.error || 'OTP verification failed');
         }
         setLoading(false); // Reset loading on success or handled failure
       } catch (error) {
-        setError(error.response?.data?.error || 'OTP verification failed');
+        setError(error?.error || 'OTP verification failed');
         setLoading(false);
       }
     }

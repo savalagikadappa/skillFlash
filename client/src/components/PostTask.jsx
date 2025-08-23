@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 // Tailwind styling applied
+import { post } from '../api';
 
 const PostTask = () => {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        if(!apiUrl){
-            console.warn('VITE_API_URL not set - API calls will fail. Define it in a .env file (e.g. VITE_API_URL=http://localhost:5000)');
-        }
+    // API base handled via api.js
 
     const [formData, setFormData] = useState({
         problemTitle: '',
@@ -32,20 +29,11 @@ const PostTask = () => {
         setError('');
         setSuccess('');
         try {
-            // Make sure the backend endpoint matches what you defined ("/add-task")
-        const token = localStorage.getItem('authToken');
-    const base = apiUrl || '';
-    const response = await axios.post(`${base}/api/tasks`, formData, {
-                headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-                }
-            });
-            console.log('Response:', response.data);
-            if(response.data.success){
-                setSuccess(response.data.message || 'Task added successfully');
+            const response = await post('/api/tasks', formData);
+            if(response?.success){
+                setSuccess(response.message || 'Task added successfully');
             } else {
-                setError(response.data.error || 'Failed to add task');
+                setError(response?.error || 'Failed to add task');
             }
             setFormData({
                 problemTitle: '',
@@ -54,7 +42,7 @@ const PostTask = () => {
                 deadline: ''
             });
         } catch (error) {
-            setError(error.response?.data?.error || 'Error adding task');
+            setError(error?.error || 'Error adding task');
         }
         setLoading(false);
     };

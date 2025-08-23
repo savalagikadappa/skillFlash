@@ -8,13 +8,28 @@ export const authHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-export const post = (path, data, opts = {}) => fetch(`${API_BASE}${path}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json', ...authHeader(), ...(opts.headers || {}) },
-  body: JSON.stringify(data)
-}).then(r => r.json());
+async function parseJSONSafe(res) {
+  const text = await res.text();
+  try { return JSON.parse(text); } catch { return { success: false, error: 'Invalid JSON response', raw: text }; }
+}
 
-export const get = (path, opts = {}) => fetch(`${API_BASE}${path}`, {
-  headers: { ...authHeader(), ...(opts.headers || {}) }
-}).then(r => r.json());
+export const post = async (path, data, opts = {}) => {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeader(), ...(opts.headers || {}) },
+    body: JSON.stringify(data)
+  });
+  const json = await parseJSONSafe(res);
+  if(!res.ok) return { success: false, error: json.error || res.statusText, status: res.status };
+  return json;
+};
+
+export const get = async (path, opts = {}) => {
+  const res = await fetch(`${API_BASE}${path}`, {
+    headers: { ...authHeader(), ...(opts.headers || {}) }
+  });
+  const json = await parseJSONSafe(res);
+  if(!res.ok) return { success: false, error: json.error || res.statusText, status: res.status };
+  return json;
+};
 
