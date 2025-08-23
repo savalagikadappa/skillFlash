@@ -19,6 +19,11 @@ exports.signup = async (req, res) => {
     try {
       await sendMail({ from: process.env.EMAIL_USER, to: email, subject: 'OTP for Signup', text: `Your OTP is ${otp}. Expires in 10 minutes.` });
     } catch (mailErr) {
+      console.error('[signup] OTP email failed:', mailErr.message);
+      // If email not configured, allow returning OTP in dev (never in production)
+      if (process.env.NODE_ENV !== 'production') {
+        return res.status(200).json({ success: true, message: 'OTP (email disabled in dev)', userId: user._id, otp });
+      }
       return res.status(500).json({ success: false, error: 'Failed to send OTP' });
     }
     res.status(200).json({ success: true, message: 'OTP sent successfully', userId: user._id });
@@ -52,7 +57,13 @@ exports.resendOtp = async (req, res) => {
     user.otp = otp; user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); await user.save();
     try {
       await sendMail({ from: process.env.EMAIL_USER, to: email, subject: 'New OTP', text: `OTP: ${otp}` });
-    } catch (mailErr) { return res.status(500).json({ success: false, error: 'Failed to send OTP' }); }
+    } catch (mailErr) {
+      console.error('[resendOtp] Email failed:', mailErr.message);
+      if (process.env.NODE_ENV !== 'production') {
+        return res.status(200).json({ success: true, message: 'New OTP (email disabled in dev)', otp });
+      }
+      return res.status(500).json({ success: false, error: 'Failed to send OTP' });
+    }
     res.status(200).json({ success: true, message: 'New OTP sent' });
   } catch (err) { console.error(err); res.status(500).json({ success: false, error: 'Failed to resend OTP' }); }
 };
